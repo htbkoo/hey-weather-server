@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    'use strict';
-    res.render('index', {title: 'hey-weather-server'});
-});
+var router_util = require('./util/router_util');
+var routes = require('./index/routes');
+
+router_util.routerAddAllRoutes(router, routes);
 
 module.exports = router;

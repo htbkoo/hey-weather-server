@@ -50,4 +50,8 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
+#
+# Custom Ignore files
+#
 
+/out/

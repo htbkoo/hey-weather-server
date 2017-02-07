@@ -4,10 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "swagger_yaml_to_json": "node ./node_modules/yamljs/cli/yaml2json.js ./api/swagger/swagger.yaml > ./out/swagger.json",
-    "swagger": "node ./node_modules/swagger/bin/swagger.js",
-    "swagger_start": "npm run swagger project start",
-    "swagger_edit": "npm run swagger project edit",
+    "swagger_yaml_to_json": "node ./node_modules/yamljs/cli/yaml2json.js ./api/swagger/swagger.yaml > ./public/swagger-ui/json/swagger.json",
+    "build": "npm run swagger_yaml_to_json",
     "debug": "node %NODE_DEBUG_OPTION% ./bin/www"
   },
   "dependencies": {

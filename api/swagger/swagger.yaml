@@ -1,0 +1,136 @@
+swagger: "2.0"
+info:
+  version: "0.1.0"
+  title: hey-weather-server
+# during dev, should point to your local machine
+host: localhost:3000
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /weather:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: weather
+    get:
+      description: Weather information of the location
+      # used as the method name of the controller
+      operationId: weather
+      parameters:
+        - name: woeid
+          in: query
+          description: The WhereOnEath ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/WeatherResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /location/query:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: location
+    get:
+      description: Find location
+      # used as the method name of the controller
+      operationId: locationQuery
+      parameters:
+        - name: query
+          in: query
+          description: The Query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/LocationResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /location/lattLong:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: location
+    get:
+      description: Find location
+      # used as the method name of the controller
+      operationId: locationLattLong
+      parameters:
+        - name: latt
+          in: query
+          description: The lattitude
+          required: true
+          type: number
+          format: float
+        - name: long
+          in: query
+          description: The longitude
+          required: true
+          type: number
+          format: float
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/LocationResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  WeatherResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  LocationResponse:
+    required:
+      - title
+      - location_type
+      - latt
+      - long
+      - woeid
+    properties:
+      title:
+        type: string
+      location_type:
+        type: string
+      latt:
+        type: number
+        format: float
+      long:
+        type: number
+        format: float
+      woeid:
+        type: number
+        format: int32
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

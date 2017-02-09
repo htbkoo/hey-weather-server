@@ -4,25 +4,20 @@
 
 var format = require("string-format");
 
+var APPID_KEY = "appid";
+var APPID = process.env.OWM_APPID || "";
+
 var routes = {
-    "/": {
+    "/byLatLon": {
         "method": "get",
         "fn": function (req, res, next) {
-            /* GET users listing. */
             'use strict';
-            var usage_response_message = format('Usage: {}', [
-                "/weather/search/?query=(query)&callback=(callback)",
-                "/weather/search/?lattlong=(latt),(long)&callback=(callback)",
-                "/weather/location/(woeid)/"
-            ].reduce(function (prev, curr) {
-                if (prev === "") {
-                    return curr;
-                } else {
-                    return format("{}  \t OR \t {}", prev, curr);
+            res.send(JSON.stringify(
+                {
+                    "lat": req.query.lat,
+                    "lon": req.query.lon
                 }
-            }, ""));
-
-            res.send(usage_response_message);
+            ));
         }
     }
 };

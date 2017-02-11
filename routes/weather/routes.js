@@ -3,21 +3,26 @@
  */
 
 var format = require("string-format");
+var httpFetcher = require("./httpFetcher");
+var envVarRetriever = require("./envVarRetriever");
 
 var APPID_KEY = "appid";
-var APPID = process.env.OWM_APPID || "";
+var getOWM_APPID = function(){
+    "use strict";
+    return envVarRetriever.getProcessEnvVar("OWM_APPID") || "";
+};
 
 var routes = {
     "/byLatLon": {
         "method": "get",
         "fn": function (req, res, next) {
             'use strict';
-            res.send(JSON.stringify(
-                {
-                    "lat": req.query.lat,
-                    "lon": req.query.lon
-                }
-            ));
+            var lat = req.query.lat;
+            var lon = req.query.lon;
+
+            httpFetcher.fetchUrl(format("http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&appid={}", lat, lon, getOWM_APPID()), function (data) {
+                res.send(data);
+            });
         }
     }
 };

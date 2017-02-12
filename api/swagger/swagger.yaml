@@ -18,119 +18,167 @@ consumes:
 produces:
   - application/json
 paths:
+  /weather/byLatLon:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: location
+    get:
+      description: Get weather information, from OpenWeatherMap (https://openweathermap.org/), for location searched by latitude and longitude
+      # used as the method name of the controller
+      operationId: byLatLon
+      parameters:
+        - name: lat
+          in: query
+          description: The Latitude of the location of your interest 
+          required: true
+          type: number
+          format: float
+        - name: lon
+          in: query
+          description: The Longitude of the location of your interest 
+          required: true
+          type: number
+          format: float
+        - name: callback
+          in: query
+          description: The name of callback function if JSONP is desired
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/LatLonResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /weather:
     # binds a127 app logic to a route
     x-swagger-router-controller: weather
     get:
-      description: Weather information of the location
+      description: /weather is currently unused
       # used as the method name of the controller
       operationId: weather
-      parameters:
-        - name: woeid
-          in: query
-          description: The WhereOnEath ID
-          required: true
-          type: string
       responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/WeatherResponse"
-        # responses may fall through to errors
         default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /location/query:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: location
-    get:
-      description: Find location
-      # used as the method name of the controller
-      operationId: locationQuery
-      parameters:
-        - name: query
-          in: query
-          description: The Query
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/LocationResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /location/lattLong:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: location
-    get:
-      description: Find location
-      # used as the method name of the controller
-      operationId: locationLattLong
-      parameters:
-        - name: latt
-          in: query
-          description: The lattitude
-          required: true
-          type: number
-          format: float
-        - name: long
-          in: query
-          description: The longitude
-          required: true
-          type: number
-          format: float
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/LocationResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
+          description: unused
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  WeatherResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
-  LocationResponse:
-    required:
-      - title
-      - location_type
-      - latt
-      - long
-      - woeid
-    properties:
-      title:
-        type: string
-      location_type:
-        type: string
-      latt:
-        type: number
-        format: float
-      long:
-        type: number
-        format: float
-      woeid:
-        type: number
-        format: int32
+  LatLonResponse:
+    required: 
+      - "coord"
+      - "sys"
+      - "weather"
+      - "main"
+      - "wind"
+      - "rain"
+      - "clouds"
+      - "dt"
+      - "id"
+      - "name"
+      - "cod"
+    properties: 
+      coord: 
+        required: 
+          - "lon"
+          - "lat"
+        properties: 
+          lon: 
+            type: "number"
+          lat: 
+            type: "number"
+        type: "object"
+      sys: 
+        required: 
+          - "country"
+          - "sunrise"
+          - "sunset"
+        properties: 
+          country: 
+            type: "string"
+          sunrise: 
+            type: "number"
+          sunset: 
+            type: "number"
+        type: "object"
+      weather: 
+        type: "array"
+        items: 
+          type: "object"
+          properties: 
+            id: 
+              type: "number"
+            main: 
+              type: "string"
+            description: 
+              type: "string"
+            icon: 
+              type: "string"
+      main: 
+        required: 
+          - "temp"
+          - "humidity"
+          - "pressure"
+          - "temp_min"
+          - "temp_max"
+        properties: 
+          temp: 
+            type: "number"
+          humidity: 
+            type: "number"
+          pressure: 
+            type: "number"
+          temp_min: 
+            type: "number"
+          temp_max: 
+            type: "number"
+        type: "object"
+      wind: 
+        required: 
+          - "speed"
+          - "deg"
+        properties: 
+          speed: 
+            type: "number"
+          deg: 
+            type: "number"
+        type: "object"
+      rain: 
+        required: 
+          - "3h"
+        properties: 
+          3h: 
+            type: "number"
+        type: "object"
+      clouds: 
+        required: 
+          - "all"
+        properties: 
+          all: 
+            type: "number"
+        type: "object"
+      dt: 
+        type: "number"
+      id: 
+        type: "number"
+      name: 
+        type: "string"
+      cod: 
+        type: "number"
   ErrorResponse:
     required:
       - message
+      - statusCode
+      - details
     properties:
       message:
+        type: string
+      statusCode:
+        type: number
+        format: int
+      details:
         type: string

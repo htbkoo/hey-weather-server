@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run swagger_yaml_to_json && npm run server",
     "server": "node ./bin/www",
-    "swagger_yaml_to_json": "node ./node_modules/yamljs/cli/yaml2json.js ./api/swagger/swagger.yaml > ./public/swagger-ui/json/swagger.json",
+    "swagger_yaml_to_json": "node ./etc/yamljs/cli/yaml2json.js ./api/swagger/swagger.yaml > ./public/swagger-ui/json/swagger.json",
     "build": "npm run swagger_yaml_to_json",
     "debug": "node %NODE_DEBUG_OPTION% ./bin/www",
     "test": "node ./node_modules/mocha/mocha.js --recursive **/*.Test.js"

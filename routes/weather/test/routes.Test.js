@@ -130,6 +130,94 @@ describe("hey-weather-server", function () {
                     done();
                 }
             }));
+
+            it("should get weather info with callback by lat,lon for '/byLatLon' with APIKey", sinon.test(function (done) {
+                // Given
+                var route_root = routes[path];
+                var mock_req = {
+                    query: {
+                        "lat": 35,
+                        "lon": 139,
+                        "callback": "myFunc"
+                    }
+                };
+                var mock_res = {
+                    send: sendAndAssert
+                };
+                var mock_appid = "hidden_but_true_id";
+                var someResponse = {"field": "value"};
+                this.stub(envVarRetriever, "getProcessEnvVar")
+                    .withArgs("OWM_APPID")
+                    .returns(mock_appid);
+                this.stub(httpFetcher, "fetchUrl")
+                    .withArgs(sinon.match(function (value) {
+                        // example url: "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=hidden_but_true_id"
+                        return [
+                            "http://api.openweathermap.org/data/2.5/weather?",
+                            "lat=" + mock_req.query.lat,
+                            "lon=" + mock_req.query.lon,
+                            "appid=" + mock_appid
+                        ].every(function (urlPart) {
+                            return value.indexOf(urlPart) !== -1;
+                        });
+                    }))
+                    .callsArgWith(1, JSON.stringify(someResponse));
+
+                // When
+                route_root.fn(mock_req, mock_res);
+
+                // Then
+                function sendAndAssert(message) {
+                    Test.expect(message).to.equal(
+                        format("/**/{}({})", mock_req.query.callback, JSON.stringify(someResponse))
+                    );
+                    done();
+                }
+            }));
+
+            it("should get weather info with ? callback by lat,lon for '/byLatLon' with APIKey", sinon.test(function (done) {
+                // Given
+                var route_root = routes[path];
+                var mock_req = {
+                    query: {
+                        "lat": 35,
+                        "lon": 139,
+                        "callback": "?"
+                    }
+                };
+                var mock_res = {
+                    send: sendAndAssert
+                };
+                var mock_appid = "hidden_but_true_id";
+                var someResponse = {"field": "value"};
+                this.stub(envVarRetriever, "getProcessEnvVar")
+                    .withArgs("OWM_APPID")
+                    .returns(mock_appid);
+                this.stub(httpFetcher, "fetchUrl")
+                    .withArgs(sinon.match(function (value) {
+                        // example url: "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=hidden_but_true_id"
+                        return [
+                            "http://api.openweathermap.org/data/2.5/weather?",
+                            "lat=" + mock_req.query.lat,
+                            "lon=" + mock_req.query.lon,
+                            "appid=" + mock_appid
+                        ].every(function (urlPart) {
+                            return value.indexOf(urlPart) !== -1;
+                        });
+                    }))
+                    .callsArgWith(1, JSON.stringify(someResponse));
+
+                // When
+                route_root.fn(mock_req, mock_res);
+
+                // Then
+                function sendAndAssert(message) {
+                    Test.expect(message).to.equal(
+                        format("/**/{}({})", "", JSON.stringify(someResponse))
+                    );
+                    done();
+                }
+            }));
         });
     });
 });

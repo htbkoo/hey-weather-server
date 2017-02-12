@@ -7,7 +7,7 @@ var httpFetcher = require("./httpFetcher");
 var envVarRetriever = require("./envVarRetriever");
 
 var APPID_KEY = "appid";
-var getOWM_APPID = function(){
+var getOWM_APPID = function () {
     "use strict";
     return envVarRetriever.getProcessEnvVar("OWM_APPID") || "";
 };
@@ -21,6 +21,10 @@ var routes = {
             var lon = req.query.lon;
 
             httpFetcher.fetchUrl(format("http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&appid={}", lat, lon, getOWM_APPID()), function (data) {
+                var callback = req.query.callback;
+                if (typeof callback !== "undefined") {
+                    data = format("/**/{}({})", callback === "?" ? "" : callback, data);
+                }
                 res.send(data);
             });
         }

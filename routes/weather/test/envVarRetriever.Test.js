@@ -23,20 +23,20 @@ describe("hey-weather-server", function () {
             }
         });
 
-        it("should have a method getProcessEnvVar", function () {
+        it("should have a method getEnvVar", function () {
             // Given
 
             // When
 
             // Then
-            Test.expect(envVarRetriever.getProcessEnvVar).to.be.a('function');
+            Test.expect(envVarRetriever.getEnvVar).to.be.a('function');
         });
 
         it("should be able to get given process.env.OWM_APPID", function () {
             // Given
 
             // When
-            var appid = envVarRetriever.getProcessEnvVar("OWM_APPID");
+            var appid = envVarRetriever.getEnvVar("OWM_APPID");
 
             // Then
             Test.expect(appid).to.equal("hidden_but_true_id");

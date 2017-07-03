@@ -104,7 +104,7 @@ describe("hey-weather-server", function () {
                     "name": "Shuzenji",
                     "cod": 200
                 };
-                this.stub(envVarRetriever, "getProcessEnvVar")
+                this.stub(envVarRetriever, "getEnvVar")
                     .withArgs("OWM_APPID")
                     .returns(mock_appid);
                 this.stub(httpFetcher, "fetchUrl")
@@ -146,7 +146,7 @@ describe("hey-weather-server", function () {
                 };
                 var mock_appid = "hidden_but_true_id";
                 var someResponse = {"field": "value"};
-                this.stub(envVarRetriever, "getProcessEnvVar")
+                this.stub(envVarRetriever, "getEnvVar")
                     .withArgs("OWM_APPID")
                     .returns(mock_appid);
                 this.stub(httpFetcher, "fetchUrl")
@@ -190,7 +190,7 @@ describe("hey-weather-server", function () {
                 };
                 var mock_appid = "hidden_but_true_id";
                 var someResponse = {"field": "value"};
-                this.stub(envVarRetriever, "getProcessEnvVar")
+                this.stub(envVarRetriever, "getEnvVar")
                     .withArgs("OWM_APPID")
                     .returns(mock_appid);
                 this.stub(httpFetcher, "fetchUrl")

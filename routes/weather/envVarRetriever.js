@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    "getEnvVar": function(key){
+    "getProcessEnvVar": function(key){
         "use strict";
         return process.env[key];
     }

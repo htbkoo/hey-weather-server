@@ -9,7 +9,7 @@ var envVarRetriever = require("./envVarRetriever");
 var APPID_KEY = "appid";
 var getOWM_APPID = function () {
     "use strict";
-    return envVarRetriever.getEnvVar("OWM_APPID") || "";
+    return envVarRetriever.getProcessEnvVar("OWM_APPID") || "";
 };
 
 var routes = {
